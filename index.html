@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SANTZ HUB - Interface de usuário interativa">
+    <meta name="keywords" content="santz, hub, interface, gui">
+    <meta name="author" content="SANTZ HUB">
+    <title>SANTZ HUB</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzAwNzhGRiIvPgo8dGV4dCB4PSIxNiIgeT0iMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TPC90ZXh0Pgo8L3N2Zz4K">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', 'Gotham', monospace, sans-serif;
+            background: linear-gradient(135deg, #1a1a1f, #2d2d35);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .main-frame {
+            width: 200px;
+            height: 160px;
+            background-color: rgb(20, 20, 25);
+            border: 2px solid rgb(0, 100, 200);
+            border-radius: 8px;
+            position: relative;
+            cursor: move;
+            box-shadow: 0 8px 32px rgba(0, 120, 255, 0.3);
+            user-select: none;
+        }
+
+        .header {
+            width: 100%;
+            height: 35px;
+            background-color: rgb(0, 120, 255);
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: move;
+        }
+
+        .title {
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Roboto', 'Gotham', monospace, sans-serif;
+            text-align: center;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+            pointer-events: none;
+        }
+
+        .container {
+            padding: 10px;
+            height: calc(100% - 45px);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .button {
+            width: 100%;
+            height: 25px;
+            background-color: rgb(25, 25, 30);
+            border: 1px solid rgb(0, 120, 255);
+            border-radius: 4px;
+            color: rgb(255, 255, 255);
+            font-size: 12px;
+            font-family: 'Roboto', 'Gotham', monospace, sans-serif;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.3px;
+            outline: none;
+        }
+
+        .button:hover {
+            background-color: rgb(0, 120, 255);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 120, 255, 0.4);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button:focus {
+            outline: 2px solid rgba(0, 120, 255, 0.5);
+            outline-offset: 2px;
+        }
+
+        .status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 120, 255, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Roboto', 'Gotham', monospace, sans-serif;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            max-width: 250px;
+            word-wrap: break-word;
+        }
+
+        .status.show {
+            opacity: 1;
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .main-frame {
+                width: 90vw;
+                max-width: 200px;
+            }
+            
+            .status {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                text-align: center;
+            }
+        }
+
+        /* Animação de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-frame {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Prevenção de seleção de texto durante o drag */
+        .dragging {
+            cursor: grabbing !important;
+        }
+
+        .dragging * {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-frame" id="mainFrame">
+        <div class="header" id="header">
+            <h1 class="title">SANTZ HUB</h1>
+        </div>
+        <div class="container">
+            <button class="button" onclick="santzMallOut()" tabindex="1">Santz Mall Out</button>
+            <button class="button" onclick="superman()" tabindex="2">Superman</button>
+            <button class="button" onclick="rejoin()" tabindex="3">Rejoin</button>
+        </div>
+    </div>
+
+    <div class="status" id="status" role="alert" aria-live="polite"></div>
+
+    <script>
+        // Configurações globais
+        const CONFIG = {
+            dragEnabled: true,
+            statusTimeout: 3000,
+            animations: true
+        };
+
+        // Sistema de arrastar e soltar
+        let isDragging = false;
+        let currentX = 0;
+        let currentY = 0;
+        let initialX = 0;
+        let initialY = 0;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        const mainFrame = document.getElementById('mainFrame');
+        const header = document.getElementById('header');
+        const body = document.body;
+
+        // Event listeners para desktop
+        header.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        // Event listeners para mobile
+        header.addEventListener('touchstart', dragStart, { passive: false });
+        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('touchend', dragEnd);
+
+        function dragStart(e) {
+            if (!CONFIG.dragEnabled) return;
+
+            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+
+            initialX = clientX - xOffset;
+            initialY = clientY - yOffset;
+
+            if (e.target === header || header.contains(e.target)) {
+                isDragging = true;
+                body.classList.add('dragging');
+                
+                // Previne o comportamento padrão em mobile
+                if (e.type === 'touchstart') {
+                    e.preventDefault();
+                }
+            }
+        }
+
+        function drag(e) {
+            if (!isDragging || !CONFIG.dragEnabled) return;
+
+            e.preventDefault();
+
+            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+            currentX = clientX - initialX;
+            currentY = clientY - initialY;
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            // Limita o movimento dentro da viewport
+            const rect = mainFrame.getBoundingClientRect();
+            const maxX = window.innerWidth - rect.width;
+            const maxY = window.innerHeight - rect.height;
+
+            currentX = Math.max(Math.min(currentX, maxX / 2), -maxX / 2);
+            currentY = Math.max(Math.min(currentY, maxY / 2), -maxY / 2);
+
+            mainFrame.style.transform = translate(${currentX}px, ${currentY}px);
+        }
+
+        function dragEnd(e) {
+            if (!isDragging) return;
+
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+            body.classList.remove('dragging');
+
+            // Pequena animação de "soltar"
+            if (CONFIG.animations) {
+                mainFrame.style.transition = 'transform 0.1s ease-out';
+                setTimeout(() => {
+                    mainFrame.style.transition = '';
+                }, 100);
+            }
+        }
+
+        // Funções dos botões
+        function santzMallOut() {
+            showStatus('✅ Santz Mall Out ativado!');
+            console.log('🎮 Santz Mall Out ativado!');
+            
+            // Simula uma ação
+            setTimeout(() => {
+                showStatus('🏬 Conectando ao mall...');
+            }, 1000);
+        }
+
+        function superman() {
+            showStatus('🦸‍♂ Superman ativado!');
+            console.log('🦸‍♂ Superman ativado!');
+            
+            // Simula uma ação
+            setTimeout(() => {
+                showStatus('✈ Modo voo habilitado!');
+            }, 1000);
+        }
+
+        function rejoin() {
+            showStatus('🔄 Rejoin ativado! Aguarde...');
+            console.log('🔄 Rejoin ativado!');
+            
+            // Simula um carregamento
+            let countdown = 3;
+            const countdownInterval = setInterval(() => {
+                showStatus(🔄 Reconectando em ${countdown}...);
+                countdown--;
+                
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    showStatus('✅ Reconectado com sucesso!');
+                    // Em um ambiente real, aqui faria o reload
+                    // window.location.reload();
+                }
+            }, 1000);
+        }
+
+        // Sistema de notificações
+        function showStatus(message) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.classList.add('show');
+            
+            // Remove a notificação após o tempo configurado
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, CONFIG.statusTimeout);
+        }
+
+        // Função de inicialização
+        function initialize() {
+            console.log('🎮 SANTZ HUB carregado com sucesso!');
+            showStatus('🎮 SANTZ HUB carregado com sucesso!');
+            
+            // Adiciona suporte a teclado
+            document.addEventListener('keydown', handleKeyboard);
+            
+            // Previne o menu de contexto no header
+            header.addEventListener('contextmenu', e => e.preventDefault());
+        }
+
+        // Suporte a navegação por teclado
+        function handleKeyboard(e) {
+            if (e.target.classList.contains('button')) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.target.click();
+                }
+            }
+        }
+
+        // Função para alternar o modo de arrastar
+        function toggleDrag() {
+            CONFIG.dragEnabled = !CONFIG.dragEnabled;
+            showStatus(Arrastar ${CONFIG.dragEnabled ? 'habilitado' : 'desabilitado'});
+        }
+
+        // Easter egg - duplo clique no título
+        header.addEventListener('dblclick', () => {
+            showStatus('🎉 Easter egg encontrado!');
+            mainFrame.style.animation = 'none';
+            mainFrame.offsetHeight; // Força reflow
+            mainFrame.style.animation = 'fadeInUp 0.5s ease-out';
+        });
+
+        // Detecta se está rodando no GitHub Pages
+        function detectEnvironment() {
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            if (isGitHubPages) {
+                console.log('🌐 Rodando no GitHub Pages');
+            } else if (isLocalhost) {
+                console.log('🏠 Rodando localmente');
+            }
+        }
+
+        // Event listener para quando a página carrega
+        document.addEventListener('DOMContentLoaded', () => {
+            initialize();
+            detectEnvironment();
+        });
+
+        // Previne erros de console
+        window.addEventListener('error', (e) => {
+            console.warn('Erro capturado:', e.message);
+        });
+
+        // Service Worker registration (opcional, para PWA)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Registra service worker apenas se o arquivo existir
+                fetch('/sw.js')
+                    .then(response => {
+                        if (response.ok) {
+                            navigator.serviceWorker.register('/sw.js')
+                                .then(() => console.log('📱 PWA habilitado'))
+                                .catch(() => console.log('📱 PWA não disponível'));
+                        }
+                    })
+                    .catch(() => {
+                        // Service worker não encontrado, ignora
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
