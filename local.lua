@@ -103,7 +103,7 @@ rejoinBtn.Parent = mainFrame
 
 -- Funcionalidades dos botões
 
--- Santz Hall Out (Teleporte 10 passos para frente)
+-- Santz Hall Out (Teleporte 10 passos para frente + 2 segundos na base)
 local function santzHallOut()
     local character = player.Character
     if character then
@@ -111,13 +111,42 @@ local function santzHallOut()
         if humanoidRootPart then
             -- Teleporta 10 studs (passos) para frente
             local lookDirection = humanoidRootPart.CFrame.LookVector
-            humanoidRootPart.CFrame = humanoidRootPart.CFrame + (lookDirection * 10)
+            local newPosition = humanoidRootPart.CFrame + (lookDirection * 10)
+            humanoidRootPart.CFrame = newPosition
+            
+            -- Ativa noclip por 2 segundos para ficar dentro da base
+            local noclipConnection
+            noclipConnection = RunService.Heartbeat:Connect(function()
+                if character and character.Parent then
+                    for _, part in pairs(character:GetDescendants()) do
+                        if part:IsA("BasePart") and part.CanCollide then
+                            part.CanCollide = false
+                        end
+                    end
+                end
+            end)
+            
+            -- Desativa noclip após 2 segundos
+            wait(2)
+            if noclipConnection then
+                noclipConnection:Disconnect()
+            end
+            
+            -- Reativa colisão
+            if character and character.Parent then
+                for _, part in pairs(character:GetDescendants()) do
+                    if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                        part.CanCollide = true
+                    end
+                end
+            end
         end
     end
 end
 
--- Superman (Velocidade e Pulo) - Corrigido
+-- Superman (Velocidade e Pulo) - Versão Corrigida
 local supermanActive = false
+local supermanConnection = nil
 local function toggleSuperman()
     local character = player.Character
     if character then
@@ -126,18 +155,44 @@ local function toggleSuperman()
             supermanActive = not supermanActive
             
             if supermanActive then
+                -- Ativar Superman
                 humanoid.WalkSpeed = 100
-                humanoid.JumpPower = 150
-                -- Para Roblox mais novo, usar JumpHeight
-                if humanoid:FindFirstChild("JumpHeight") then
+                
+                -- Tentar ambos os métodos de pulo
+                pcall(function()
+                    humanoid.JumpPower = 150
+                end)
+                pcall(function()
                     humanoid.JumpHeight = 50
-                end
+                end)
+                
+                -- Força as mudanças continuamente
+                supermanConnection = RunService.Heartbeat:Connect(function()
+                    if humanoid and humanoid.Parent then
+                        humanoid.WalkSpeed = 100
+                        pcall(function()
+                            humanoid.JumpPower = 150
+                        end)
+                        pcall(function()
+                            humanoid.JumpHeight = 50
+                        end)
+                    end
+                end)
+                
             else
-                humanoid.WalkSpeed = 16 -- Velocidade normal
-                humanoid.JumpPower = 50 -- Pulo normal
-                if humanoid:FindFirstChild("JumpHeight") then
-                    humanoid.JumpHeight = 7.2
+                -- Desativar Superman
+                if supermanConnection then
+                    supermanConnection:Disconnect()
+                    supermanConnection = nil
                 end
+                
+                humanoid.WalkSpeed = 16
+                pcall(function()
+                    humanoid.JumpPower = 50
+                end)
+                pcall(function()
+                    humanoid.JumpHeight = 7.2
+                end)
             end
         end
     end
@@ -187,6 +242,10 @@ addButtonEffects(rejoinBtn)
 player.CharacterAdded:Connect(function(character)
     wait(1)
     supermanActive = false
+    if supermanConnection then
+        supermanConnection:Disconnect()
+        supermanConnection = nil
+    end
 end)
 
 -- Toggle GUI (Tecla Insert)
