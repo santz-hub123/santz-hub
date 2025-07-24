@@ -1,1 +1,260 @@
-loadstring([[ -- 🎮 SANTZ HUB local Players = game:GetService("Players") local TweenService = game:GetService("TweenService") local UserInputService = game:GetService("UserInputService") local player = Players.LocalPlayer local playerGui = player:WaitForChild("PlayerGui") -- Cores tema azul local colors = { background = Color3.fromRGB(20, 20, 25), primary = Color3.fromRGB(0, 120, 255), secondary = Color3.fromRGB(30, 144, 255), border = Color3.fromRGB(0, 100, 200), text = Color3.fromRGB(255, 255, 255), button = Color3.fromRGB(25, 25, 30) } -- Criar GUI principal local screenGui = Instance.new("ScreenGui") screenGui.Name = "SantzHubGUI" screenGui.Parent = playerGui screenGui.ResetOnSpawn = false -- Frame principal local mainFrame = Instance.new("Frame") mainFrame.Name = "MainFrame" mainFrame.Size = UDim2.new(0, 200, 0, 160) mainFrame.Position = UDim2.new(0.5, -100, 0.5, -80) mainFrame.BackgroundColor3 = colors.background mainFrame.BorderColor3 = colors.border mainFrame.BorderSizePixel = 2 mainFrame.Parent = screenGui -- Bordas arredondadas local corner = Instance.new("UICorner") corner.CornerRadius = UDim.new(0, 8) corner.Parent = mainFrame -- Header com título local header = Instance.new("Frame") header.Name = "Header" header.Size = UDim2.new(1, 0, 0, 35) header.Position = UDim2.new(0, 0, 0, 0) header.BackgroundColor3 = colors.primary header.BorderSizePixel = 0 header.Parent = mainFrame local headerCorner = Instance.new("UICorner") headerCorner.CornerRadius = UDim.new(0, 8) headerCorner.Parent = header -- Título principal local title = Instance.new("TextLabel") title.Name = "Title" title.Size = UDim2.new(1, 0, 1, 0) title.Position = UDim2.new(0, 0, 0, 0) title.BackgroundTransparency = 1 title.Text = "SANTZ HUB" title.TextColor3 = colors.text title.TextSize = 16 title.TextXAlignment = Enum.TextXAlignment.Center title.Font = Enum.Font.GothamBold title.Parent = header -- Container para botões local container = Instance.new("Frame") container.Name = "Container" container.Size = UDim2.new(1, -20, 1, -45) container.Position = UDim2.new(0, 10, 0, 40) container.BackgroundTransparency = 1 container.Parent = mainFrame -- Função para criar botões local function createButton(text, position, callback) local button = Instance.new("TextButton") button.Name = text .. "Button" button.Size = UDim2.new(1, 0, 0, 25) button.Position = position button.BackgroundColor3 = colors.button button.BorderColor3 = colors.primary button.BorderSizePixel = 1 button.Text = text button.TextColor3 = colors.text button.TextSize = 12 button.Font = Enum.Font.Gotham button.Parent = container local buttonCorner = Instance.new("UICorner") buttonCorner.CornerRadius = UDim.new(0, 4) buttonCorner.Parent = button -- Efeito hover button.MouseEnter:Connect(function() button.BackgroundColor3 = colors.primary end) button.MouseLeave:Connect(function() button.BackgroundColor3 = colors.button end) if callback then button.MouseButton1Click:Connect(callback) end return button end -- Criar os botões principais local santzMallBtn = createButton("Santz Mall Out", UDim2.new(0, 0, 0, 5), function() print("Santz Mall Out ativado!") end) local supermanBtn = createButton("Superman", UDim2.new(0, 0, 0, 35), function() print("Superman ativado!") end) local rejoinBtn = createButton("Rejoin", UDim2.new(0, 0, 0, 65), function() print("Rejoin ativado!") game:GetService("TeleportService"):Teleport(game.PlaceId, player) end) -- Tornar a GUI arrastável local dragging = false local dragStart = nil local startPos = nil header.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true dragStart = input.Position startPos = mainFrame.Position end end) UserInputService.InputChanged:Connect(function(input) if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then local delta = input.Position - dragStart mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y) end end) UserInputService.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end end) print("🎮 SANTZ HUB carregado com sucesso!") ]])()
+-- SANTZ HUB Script
+-- Roblox Local Script
+
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Criar ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SantzHubGui"
+screenGui.Parent = CoreGui
+
+-- Frame principal
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BorderColor3 = Color3.fromRGB(0, 162, 255)
+mainFrame.BorderSizePixel = 2
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+
+-- Corner para arredondar
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = mainFrame
+
+-- Título
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "Title"
+titleLabel.Size = UDim2.new(1, 0, 0, 40)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+titleLabel.BorderSizePixel = 0
+titleLabel.Text = "SANTZ VIP+"
+titleLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
+titleLabel.TextScaled = true
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 8)
+titleCorner.Parent = titleLabel
+
+-- TikTok Label
+local tiktokLabel = Instance.new("TextLabel")
+tiktokLabel.Name = "TikTokLabel"
+tiktokLabel.Size = UDim2.new(1, 0, 0, 25)
+tiktokLabel.Position = UDim2.new(0, 0, 0, 45)
+tiktokLabel.BackgroundTransparency = 1
+tiktokLabel.Text = "TIKTOK: santzhub.scripts"
+tiktokLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
+tiktokLabel.TextScaled = true
+tiktokLabel.Font = Enum.Font.Gotham
+tiktokLabel.Parent = mainFrame
+
+-- Botão Santz Hall Out
+local hallOutBtn = Instance.new("TextButton")
+hallOutBtn.Name = "HallOutBtn"
+hallOutBtn.Size = UDim2.new(0.8, 0, 0, 30)
+hallOutBtn.Position = UDim2.new(0.1, 0, 0, 80)
+hallOutBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+hallOutBtn.BorderColor3 = Color3.fromRGB(0, 162, 255)
+hallOutBtn.BorderSizePixel = 1
+hallOutBtn.Text = "Santz Hall Out"
+hallOutBtn.TextColor3 = Color3.fromRGB(0, 162, 255)
+hallOutBtn.TextScaled = true
+hallOutBtn.Font = Enum.Font.Gotham
+hallOutBtn.Parent = mainFrame
+
+local hallOutCorner = Instance.new("UICorner")
+hallOutCorner.CornerRadius = UDim.new(0, 5)
+hallOutCorner.Parent = hallOutBtn
+
+-- Botão Superman
+local supermanBtn = Instance.new("TextButton")
+supermanBtn.Name = "SupermanBtn"
+supermanBtn.Size = UDim2.new(0.8, 0, 0, 30)
+supermanBtn.Position = UDim2.new(0.1, 0, 0, 120)
+supermanBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+supermanBtn.BorderColor3 = Color3.fromRGB(0, 162, 255)
+supermanBtn.BorderSizePixel = 1
+supermanBtn.Text = "Superman"
+supermanBtn.TextColor3 = Color3.fromRGB(0, 162, 255)
+supermanBtn.TextScaled = true
+supermanBtn.Font = Enum.Font.Gotham
+supermanBtn.Parent = mainFrame
+
+local supermanCorner = Instance.new("UICorner")
+supermanCorner.CornerRadius = UDim.new(0, 5)
+supermanCorner.Parent = supermanBtn
+
+-- Botão Rejoin
+local rejoinBtn = Instance.new("TextButton")
+rejoinBtn.Name = "RejoinBtn"
+rejoinBtn.Size = UDim2.new(0.8, 0, 0, 30)
+rejoinBtn.Position = UDim2.new(0.1, 0, 0, 160)
+rejoinBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+rejoinBtn.BorderColor3 = Color3.fromRGB(0, 162, 255)
+rejoinBtn.BorderSizePixel = 1
+rejoinBtn.Text = "Rejoin"
+rejoinBtn.TextColor3 = Color3.fromRGB(0, 162, 255)
+rejoinBtn.TextScaled = true
+rejoinBtn.Font = Enum.Font.Gotham
+rejoinBtn.Parent = mainFrame
+
+local rejoinCorner = Instance.new("UICorner")
+rejoinCorner.CornerRadius = UDim.new(0, 5)
+rejoinCorner.Parent = rejoinBtn
+
+-- Funções dos botões
+local function createNotification(text)
+    local notificationGui = Instance.new("ScreenGui")
+    notificationGui.Name = "Notification"
+    notificationGui.Parent = CoreGui
+    
+    local notificationFrame = Instance.new("Frame")
+    notificationFrame.Size = UDim2.new(0, 300, 0, 80)
+    notificationFrame.Position = UDim2.new(1, 0, 0, 50)
+    notificationFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    notificationFrame.BorderColor3 = Color3.fromRGB(0, 162, 255)
+    notificationFrame.BorderSizePixel = 2
+    notificationFrame.Parent = notificationGui
+    
+    local notificationCorner = Instance.new("UICorner")
+    notificationCorner.CornerRadius = UDim.new(0, 8)
+    notificationCorner.Parent = notificationFrame
+    
+    local notificationLabel = Instance.new("TextLabel")
+    notificationLabel.Size = UDim2.new(1, -20, 1, -20)
+    notificationLabel.Position = UDim2.new(0, 10, 0, 10)
+    notificationLabel.BackgroundTransparency = 1
+    notificationLabel.Text = text
+    notificationLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
+    notificationLabel.TextWrapped = true
+    notificationLabel.Font = Enum.Font.Gotham
+    notificationLabel.TextSize = 14
+    notificationLabel.Parent = notificationFrame
+    
+    -- Animação de entrada
+    local tweenIn = TweenService:Create(notificationFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Position = UDim2.new(1, -320, 0, 50)})
+    tweenIn:Play()
+    
+    -- Remover após 3 segundos
+    wait(3)
+    local tweenOut = TweenService:Create(notificationFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Position = UDim2.new(1, 0, 0, 50)})
+    tweenOut:Play()
+    tweenOut.Completed:Connect(function()
+        notificationGui:Destroy()
+    end)
+end
+
+-- Função Santz Hall Out (noclip/fly)
+local function santzHallOut()
+    createNotification("Santz Hall Out Ativado!")
+    
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+    
+    -- Noclip
+    local function noclip()
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") and part.CanCollide then
+                part.CanCollide = false
+            end
+        end
+    end
+    
+    -- Fly
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+    bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+    bodyVelocity.Parent = rootPart
+    
+    local flying = true
+    spawn(function()
+        while flying do
+            noclip()
+            wait(0.1)
+        end
+    end)
+end
+
+-- Função Superman (super velocidade e pulo)
+local function superman()
+    createNotification("Superman Ativado!")
+    
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    humanoid.WalkSpeed = 100
+    humanoid.JumpPower = 150
+end
+
+-- Função Rejoin
+local function rejoin()
+    createNotification("Reconectando ao servidor...")
+    
+    wait(1)
+    game:GetService("TeleportService"):Teleport(game.PlaceId, player)
+end
+
+-- Conectar botões às funções
+hallOutBtn.MouseButton1Click:Connect(santzHallOut)
+supermanBtn.MouseButton1Click:Connect(superman)
+rejoinBtn.MouseButton1Click:Connect(rejoin)
+
+-- Efeitos visuais dos botões
+local function addButtonEffects(button)
+    button.MouseEnter:Connect(function()
+        local tween = TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)})
+        tween:Play()
+    end)
+    
+    button.MouseLeave:Connect(function()
+        local tween = TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(25, 25, 25)})
+        tween:Play()
+    end)
+end
+
+addButtonEffects(hallOutBtn)
+addButtonEffects(supermanBtn)
+addButtonEffects(rejoinBtn)
+
+-- Botão de fechar
+local closeBtn = Instance.new("TextButton")
+closeBtn.Name = "CloseBtn"
+closeBtn.Size = UDim2.new(0, 25, 0, 25)
+closeBtn.Position = UDim2.new(1, -30, 0, 5)
+closeBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+closeBtn.BorderSizePixel = 0
+closeBtn.Text = "X"
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.TextSize = 14
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.Parent = mainFrame
+
+local closeBtnCorner = Instance.new("UICorner")
+closeBtnCorner.CornerRadius = UDim.new(0, 12)
+closeBtnCorner.Parent = closeBtn
+
+closeBtn.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+-- Toggle GUI com tecla
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.RightControl then
+        mainFrame.Visible = not mainFrame.Visible
+    end
+end)
+
+print("SANTZ HUB carregado com sucesso! Pressione Right Control para abrir/fechar.")
