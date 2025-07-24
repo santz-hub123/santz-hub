@@ -623,4 +623,425 @@ local function createSlider(name, displayName, minVal, maxVal, defaultVal, yPos)
     sliderFrame.Name = name .. "Frame"
     sliderFrame.Size = UDim2.new(1, 0, 0, 40)
     sliderFrame.Position = UDim2.new(0, 0, 0, yPos)
-    sliderFrame.BackgroundTransparency =
+    sliderFrame.BackgroundTransparency = 1
+    sliderFrame.Parent = container
+    
+    local label = Instance.new("TextLabel")
+    label.Name = "Label"
+    label.Size = UDim2.new(1, 0, 0, 15)
+    label.Position = UDim2.new(0, 0, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = displayName
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextSize = 10
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Font = Enum.Font.GothamSemibold
+    label.Parent = sliderFrame
+    
+    local valueLabel = Instance.new("TextLabel")
+    valueLabel.Name = "ValueLabel"
+    valueLabel.Size = UDim2.new(0, 40, 0, 15)
+    valueLabel.Position = UDim2.new(1, -40, 0, 0)
+    valueLabel.BackgroundTransparency = 1
+    valueLabel.Text = tostring(defaultVal)
+    valueLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
+    valueLabel.TextSize = 10
+    valueLabel.TextXAlignment = Enum.TextXAlignment.Right
+    valueLabel.Font = Enum.Font.GothamBold
+    valueLabel.Parent = sliderFrame
+    
+    local sliderBg = Instance.new("Frame")
+    sliderBg.Name = "SliderBg"
+    sliderBg.Size = UDim2.new(1, 0, 0, 4)
+    sliderBg.Position = UDim2.new(0, 0, 0, 20)
+    sliderBg.BackgroundColor3 = Color3.fromRGB(40, 43, 48)
+    sliderBg.BorderSizePixel = 0
+    sliderBg.Parent = sliderFrame
+    
+    local sliderBgCorner = Instance.new("UICorner")
+    sliderBgCorner.CornerRadius = UDim.new(0, 2)
+    sliderBgCorner.Parent = sliderBg
+    
+    local sliderFill = Instance.new("Frame")
+    sliderFill.Name = "SliderFill"
+    sliderFill.Size = UDim2.new((defaultVal - minVal) / (maxVal - minVal), 0, 1, 0)
+    sliderFill.Position = UDim2.new(0, 0, 0, 0)
+    sliderFill.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+    sliderFill.BorderSizePixel = 0
+    sliderFill.Parent = sliderBg
+    
+    local sliderFillCorner = Instance.new("UICorner")
+    sliderFillCorner.CornerRadius = UDim.new(0, 2)
+    sliderFillCorner.Parent = sliderFill
+    
+    local sliderHandle = Instance.new("Frame")
+    sliderHandle.Name = "SliderHandle"
+    sliderHandle.Size = UDim2.new(0, 12, 0, 12)
+    sliderHandle.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -6, 0, -4)
+    sliderHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    sliderHandle.BorderSizePixel = 0
+    sliderHandle.Parent = sliderBg
+    
+    local handleCorner = Instance.new("UICorner")
+    handleCorner.CornerRadius = UDim.new(0, 6)
+    handleCorner.Parent = sliderHandle
+    
+    local currentValue = defaultVal
+    local dragging = false
+    
+    local function updateSlider(value)
+        currentValue = math.clamp(value, minVal, maxVal)
+        local percentage = (currentValue - minVal) / (maxVal - minVal)
+        
+        sliderFill.Size = UDim2.new(percentage, 0, 1, 0)
+        sliderHandle.Position = UDim2.new(percentage, -6, 0, -4)
+        valueLabel.Text = tostring(currentValue)
+        
+        if name == "Speed" then
+            currentSpeed = currentValue
+        elseif name == "Jump" then
+            currentJump = currentValue
+        end
+        
+        -- Salvar automaticamente quando alterar
+        saveSettings()
+    end
+    
+    sliderHandle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local mousePos = input.Position.X
+            local sliderPos = sliderBg.AbsolutePosition.X
+            local sliderSize = sliderBg.AbsoluteSize.X
+            local percentage = math.clamp((mousePos - sliderPos) / sliderSize, 0, 1)
+            local value = math.floor(minVal + percentage * (maxVal - minVal))
+            updateSlider(value)
+        end
+    end)
+    
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+    
+    return updateSlider
+end
+
+-- Criar sliders compactos
+local updateSpeed = createSlider("Speed", "🏃 Velocidade", 1, 200, currentSpeed, 35)
+local updateJump = createSlider("Jump", "🦘 Pulo", 1, 300, currentJump, 85)
+
+-- Botão toggle Superman
+local toggleSupermanBtn = Instance.new("TextButton")
+toggleSupermanBtn.Name = "ToggleButton"
+toggleSupermanBtn.Size = UDim2.new(1, 0, 0, 30)
+toggleSupermanBtn.Position = UDim2.new(0, 0, 0, 135)
+toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
+toggleSupermanBtn.BorderSizePixel = 0
+toggleSupermanBtn.Text = "🚀 ATIVAR"
+toggleSupermanBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleSupermanBtn.TextSize = 12
+toggleSupermanBtn.Font = Enum.Font.GothamBold
+toggleSupermanBtn.Parent = container
+
+local toggleBtnCorner = Instance.new("UICorner")
+toggleBtnCorner.CornerRadius = UDim.new(0, 8)
+toggleBtnCorner.Parent = toggleSupermanBtn
+
+-- Botões salvar/reset compactos
+local saveBtn = Instance.new("TextButton")
+saveBtn.Name = "SaveButton"
+saveBtn.Size = UDim2.new(0.48, 0, 0, 25)
+saveBtn.Position = UDim2.new(0, 0, 0, 175)
+saveBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
+saveBtn.BorderSizePixel = 0
+saveBtn.Text = "💾"
+saveBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+saveBtn.TextSize = 10
+saveBtn.Font = Enum.Font.GothamBold
+saveBtn.Parent = container
+
+local saveBtnCorner = Instance.new("UICorner")
+saveBtnCorner.CornerRadius = UDim.new(0, 8)
+saveBtnCorner.Parent = saveBtn
+
+local resetBtn = Instance.new("TextButton")
+resetBtn.Name = "ResetButton"
+resetBtn.Size = UDim2.new(0.48, 0, 0, 25)
+resetBtn.Position = UDim2.new(0.52, 0, 0, 175)
+resetBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
+resetBtn.BorderSizePixel = 0
+resetBtn.Text = "🔄"
+resetBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+resetBtn.TextSize = 10
+resetBtn.Font = Enum.Font.GothamBold
+resetBtn.Parent = container
+
+local resetBtnCorner = Instance.new("UICorner")
+resetBtnCorner.CornerRadius = UDim.new(0, 8)
+resetBtnCorner.Parent = resetBtn
+
+-- Variáveis Superman
+local isSupermanActive = false
+local supermanConnection = nil
+
+-- Funcionalidades dos botões
+
+-- Santz Hall Out (Teleporte 10 passos para frente + 2 segundos na base)
+local function santzHallOut()
+    local character = player.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            -- Teleporta 10 studs (passos) para frente
+            local lookDirection = humanoidRootPart.CFrame.LookVector
+            local newPosition = humanoidRootPart.CFrame + (lookDirection * 10)
+            humanoidRootPart.CFrame = newPosition
+            
+            -- Ativa noclip por 2 segundos para ficar dentro da base
+            local noclipConnection
+            noclipConnection = RunService.Heartbeat:Connect(function()
+                if character and character.Parent then
+                    for _, part in pairs(character:GetDescendants()) do
+                        if part:IsA("BasePart") and part.CanCollide then
+                            part.CanCollide = false
+                        end
+                    end
+                end
+            end)
+            
+            -- Desativa noclip após 2 segundos
+            wait(2)
+            if noclipConnection then
+                noclipConnection:Disconnect()
+            end
+            
+            -- Reativa colisão
+            if character and character.Parent then
+                for _, part in pairs(character:GetDescendants()) do
+                    if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                        part.CanCollide = true
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- Abrir GUI Superman
+local function openSupermanGui()
+    supermanGuiOpen = not supermanGuiOpen
+    supermanGui.Visible = supermanGuiOpen
+    
+    if supermanGuiOpen then
+        -- Animação de entrada
+        supermanGui.Size = UDim2.new(0, 0, 0, 0)
+        supermanGui.Visible = true
+        local openTween = TweenService:Create(supermanGui, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 300, 0, 250)})
+        openTween:Play()
+    end
+end
+
+-- Abrir GUI Server Hop
+local function openServerHopGui()
+    serverHopGuiOpen = not serverHopGuiOpen
+    serverHopGui.Visible = serverHopGuiOpen
+    
+    if serverHopGuiOpen then
+        -- Animação de entrada
+        serverHopGui.Size = UDim2.new(0, 0, 0, 0)
+        serverHopGui.Visible = true
+        local openTween = TweenService:Create(serverHopGui, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 320, 0, 280)})
+        openTween:Play()
+    end
+end
+
+-- Aplicar boost Superman
+local function applySupermanBoost()
+    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+        local humanoid = player.Character.Humanoid
+        humanoid.WalkSpeed = currentSpeed
+        humanoid.JumpPower = currentJump
+        -- Para versões mais novas do Roblox
+        pcall(function()
+            humanoid.JumpHeight = currentJump / 4
+        end)
+    end
+end
+
+-- Toggle Superman boost
+local function toggleSupermanBoost()
+    isSupermanActive = not isSupermanActive
+    
+    if isSupermanActive then
+        toggleSupermanBtn.Text = "🛑 PARAR"
+        toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
+        statusLabel.Text = "🟢 ATIVO - S:" .. currentSpeed .. " J:" .. currentJump
+        statusLabel.TextColor3 = Color3.fromRGB(67, 181, 129)
+        
+        -- Força as mudanças continuamente
+        supermanConnection = RunService.Heartbeat:Connect(function()
+            applySupermanBoost()
+        end)
+    else
+        toggleSupermanBtn.Text = "🚀 ATIVAR"
+        toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
+        statusLabel.Text = "🔴 BOOST INATIVO"
+        statusLabel.TextColor3 = Color3.fromRGB(185, 187, 190)
+        
+        if supermanConnection then
+            supermanConnection:Disconnect()
+            supermanConnection = nil
+        end
+        
+        if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+            local humanoid = player.Character.Humanoid
+            humanoid.WalkSpeed = 16
+            humanoid.JumpPower = 50
+            pcall(function()
+                humanoid.JumpHeight = 7.2
+            end)
+        end
+    end
+end
+
+-- Rejoin
+local function rejoin()
+    TeleportService:Teleport(game.PlaceId, player)
+end
+
+-- Função para resetar configurações
+local function resetSettings()
+    currentSpeed = 50
+    currentJump = 100
+    updateSpeed(currentSpeed)
+    updateJump(currentJump)
+    saveSettings()
+    print("🔄 Configurações resetadas para padrão!")
+end
+
+-- Conectar eventos dos botões principais
+hallOutBtn.MouseButton1Click:Connect(santzHallOut)
+supermanBtn.MouseButton1Click:Connect(openSupermanGui)
+serverHopBtn.MouseButton1Click:Connect(openServerHopGui)
+rejoinBtn.MouseButton1Click:Connect(rejoin)
+
+-- Conectar eventos dos botões Superman
+toggleSupermanBtn.MouseButton1Click:Connect(toggleSupermanBoost)
+closeSupermanBtn.MouseButton1Click:Connect(function()
+    supermanGui.Visible = false
+    supermanGuiOpen = false
+end)
+
+-- Conectar botões de salvamento
+saveBtn.MouseButton1Click:Connect(function()
+    saveSettings()
+    print("💾 Configurações salvas com sucesso!")
+end)
+
+resetBtn.MouseButton1Click:Connect(resetSettings)
+
+-- Conectar eventos dos botões Server Hop
+secretButton.MouseButton1Click:Connect(function()
+    autoServerHop("SECRET")
+end)
+
+godButton.MouseButton1Click:Connect(function()
+    autoServerHop("GOD")
+end)
+
+secretGodButton.MouseButton1Click:Connect(function()
+    autoServerHop("SECRET/GOD")
+end)
+
+espGodButton.MouseButton1Click:Connect(function()
+    createESP("GOD")
+end)
+
+espSecretButton.MouseButton1Click:Connect(function()
+    createESP("SECRET")
+end)
+
+closeServerHopBtn.MouseButton1Click:Connect(function()
+    serverHopGui.Visible = false
+    serverHopGuiOpen = false
+end)
+
+-- Efeitos visuais dos botões principais
+local function addButtonEffects(button)
+    local originalColor = Color3.fromRGB(0, 162, 255)
+    local hoverColor = Color3.fromRGB(100, 200, 255)
+    local clickColor = Color3.fromRGB(0, 100, 200)
+    
+    button.MouseEnter:Connect(function()
+        button.TextColor3 = hoverColor
+    end)
+    
+    button.MouseLeave:Connect(function()
+        button.TextColor3 = originalColor
+    end)
+    
+    button.MouseButton1Down:Connect(function()
+        button.TextColor3 = clickColor
+    end)
+    
+    button.MouseButton1Up:Connect(function()
+        button.TextColor3 = hoverColor
+    end)
+end
+
+addButtonEffects(hallOutBtn)
+addButtonEffects(supermanBtn)
+addButtonEffects(serverHopBtn)
+addButtonEffects(rejoinBtn)
+
+-- Efeito de brilho nos botões do server hop
+local function addHoverEffect(button)
+    button.MouseEnter:Connect(function()
+        button.BackgroundTransparency = 0.2
+    end)
+    
+    button.MouseLeave:Connect(function()
+        button.BackgroundTransparency = 0
+    end)
+end
+
+-- Adicionar efeitos a todos os botões do server hop
+addHoverEffect(secretButton)
+addHoverEffect(godButton)
+addHoverEffect(secretGodButton)
+addHoverEffect(espGodButton)
+addHoverEffect(espSecretButton)
+
+-- Reset automático do personagem
+player.CharacterAdded:Connect(function(character)
+    wait(1)
+    if isSupermanActive then
+        applySupermanBoost()
+    end
+end)
+
+-- Toggle GUI principal (Tecla Insert)
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.Insert then
+        mainFrame.Visible = not mainFrame.Visible
+    end
+end)
+
+-- Notificação de inicialização
+createNotification("SANTZ HUB", "Sistema inicializado com sucesso!", 5)
+
+print("SANTZ HUB carregado! Pressione INSERT para abrir/fechar.")
+print("✅ Funcionalidades:")
+print("- Santz Hall Out (teleporte + noclip)")
+print("- Superman (velocidade e pulo customizáveis)")
+print("- Server Hop (procurar servidores especiais)")
+print("- ESP (marcar brainrots SECRET/GOD)")
+print("- Rejoin (reconectar)")
+print("✅ Configurações carregadas: Speed " .. currentSpeed .. " | Jump " .. currentJump)
