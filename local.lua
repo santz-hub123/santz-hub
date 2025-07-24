@@ -1,4 +1,4 @@
--- SANTZ HUB RGB + Server Hopping - Script Completo
+-- SANTZ HUB + Server Hopping - Script Completo
 -- Criado por: Santz
 
 local Players = game:GetService("Players")
@@ -92,7 +92,7 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "SantzHubGui"
 screenGui.Parent = CoreGui
 
--- Frame principal RGB
+-- Frame principal (SEM RGB no nome)
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 200, 0, 170)
@@ -129,13 +129,13 @@ end
 
 createRGBEffect()
 
--- Título SANTZ HUB RGB
+-- Título SANTZ HUB (sem RGB)
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "Title"
 titleLabel.Size = UDim2.new(1, 0, 0, 25)
 titleLabel.Position = UDim2.new(0, 0, 0, 5)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "SANTZ HUB RGB"
+titleLabel.Text = "SANTZ HUB"
 titleLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
 titleLabel.TextSize = 16
 titleLabel.Font = Enum.Font.Arcade
@@ -321,13 +321,15 @@ statusLabel.TextXAlignment = Enum.TextXAlignment.Left
 statusLabel.Font = Enum.Font.Gotham
 statusLabel.Parent = statusFrame
 
--- GUI DO SERVER HOP
+-- GUI DO SERVER HOP RGB (MENOR E TRANSPARENTE)
 local serverHopGui = Instance.new("Frame")
 serverHopGui.Name = "ServerHopGUI"
-serverHopGui.Size = UDim2.new(0, 400, 0, 400)
-serverHopGui.Position = UDim2.new(0.5, -200, 0.5, -200)
+serverHopGui.Size = UDim2.new(0, 320, 0, 280)
+serverHopGui.Position = UDim2.new(0.5, -160, 0.5, -140)
 serverHopGui.BackgroundColor3 = Color3.fromRGB(34, 139, 34)
-serverHopGui.BorderSizePixel = 0
+serverHopGui.BackgroundTransparency = 0.3
+serverHopGui.BorderSizePixel = 2
+serverHopGui.BorderColor3 = Color3.fromRGB(0, 162, 255)
 serverHopGui.Visible = false
 serverHopGui.Active = true
 serverHopGui.Draggable = true
@@ -335,52 +337,69 @@ serverHopGui.Parent = screenGui
 
 -- Arredondar Server Hop GUI
 local serverHopCorner = Instance.new("UICorner")
-serverHopCorner.CornerRadius = UDim.new(0, 15)
+serverHopCorner.CornerRadius = UDim.new(0, 10)
 serverHopCorner.Parent = serverHopGui
 
--- Título do Server Hop
+-- Efeito RGB na borda do Server Hop GUI
+spawn(function()
+    local hue = 0
+    while wait(0.1) do
+        hue = hue + 5
+        if hue >= 360 then hue = 0 end
+        
+        local r = math.sin(math.rad(hue)) * 127 + 128
+        local g = math.sin(math.rad(hue + 120)) * 127 + 128
+        local b = math.sin(math.rad(hue + 240)) * 127 + 128
+        
+        serverHopGui.BorderColor3 = Color3.fromRGB(r, g, b)
+    end
+end)
+
+-- Título do Server Hop RGB
 local hopTitleLabel = Instance.new("TextLabel")
 hopTitleLabel.Name = "TitleLabel"
 hopTitleLabel.Parent = serverHopGui
 hopTitleLabel.BackgroundTransparency = 1
-hopTitleLabel.Position = UDim2.new(0, 0, 0, 10)
-hopTitleLabel.Size = UDim2.new(1, 0, 0, 30)
-hopTitleLabel.Font = Enum.Font.GothamBold
-hopTitleLabel.Text = "SANTZ HOP PREMIUM"
+hopTitleLabel.Position = UDim2.new(0, 0, 0, 5)
+hopTitleLabel.Size = UDim2.new(1, 0, 0, 25)
+hopTitleLabel.Font = Enum.Font.Arcade
+hopTitleLabel.Text = "SANTZ HOP RGB"
 hopTitleLabel.TextColor3 = Color3.fromRGB(135, 206, 235)
 hopTitleLabel.TextScaled = true
-hopTitleLabel.TextSize = 24
+hopTitleLabel.TextSize = 18
 hopTitleLabel.TextStrokeTransparency = 0
 hopTitleLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 
--- Subtítulo Server Hop
-local hopSubtitleLabel = Instance.new("TextLabel")
-hopSubtitleLabel.Name = "SubtitleLabel"
-hopSubtitleLabel.Parent = serverHopGui
-hopSubtitleLabel.BackgroundTransparency = 1
-hopSubtitleLabel.Position = UDim2.new(0, 0, 0, 40)
-hopSubtitleLabel.Size = UDim2.new(1, 0, 0, 20)
-hopSubtitleLabel.Font = Enum.Font.Gotham
-hopSubtitleLabel.Text = "Servidor hopping avançado"
-hopSubtitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-hopSubtitleLabel.TextScaled = true
-hopSubtitleLabel.TextSize = 14
+-- Efeito RGB no título do Server Hop
+spawn(function()
+    local hue = 0
+    while wait(0.1) do
+        hue = hue + 10
+        if hue >= 360 then hue = 0 end
+        
+        local r = math.sin(math.rad(hue)) * 127 + 128
+        local g = math.sin(math.rad(hue + 120)) * 127 + 128
+        local b = math.sin(math.rad(hue + 240)) * 127 + 128
+        
+        hopTitleLabel.TextColor3 = Color3.fromRGB(r, g, b)
+    end
+end)
 
 -- Botão fechar Server Hop
 local closeServerHopBtn = Instance.new("TextButton")
 closeServerHopBtn.Name = "CloseButton"
-closeServerHopBtn.Size = UDim2.new(0, 30, 0, 30)
-closeServerHopBtn.Position = UDim2.new(1, -35, 0, 5)
+closeServerHopBtn.Size = UDim2.new(0, 25, 0, 25)
+closeServerHopBtn.Position = UDim2.new(1, -30, 0, 5)
 closeServerHopBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
 closeServerHopBtn.BorderSizePixel = 0
 closeServerHopBtn.Text = "×"
 closeServerHopBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeServerHopBtn.TextSize = 16
+closeServerHopBtn.TextSize = 14
 closeServerHopBtn.Font = Enum.Font.GothamBold
 closeServerHopBtn.Parent = serverHopGui
 
 local closeHopBtnCorner = Instance.new("UICorner")
-closeHopBtnCorner.CornerRadius = UDim.new(0, 8)
+closeHopBtnCorner.CornerRadius = UDim.new(0, 6)
 closeHopBtnCorner.Parent = closeServerHopBtn
 
 -- Frame de status do hop
@@ -388,12 +407,13 @@ local hopStatusFrame = Instance.new("Frame")
 hopStatusFrame.Name = "StatusFrame"
 hopStatusFrame.Parent = serverHopGui
 hopStatusFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+hopStatusFrame.BackgroundTransparency = 0.3
 hopStatusFrame.BorderSizePixel = 0
-hopStatusFrame.Position = UDim2.new(0.05, 0, 0.2, 0)
+hopStatusFrame.Position = UDim2.new(0.05, 0, 0.15, 0)
 hopStatusFrame.Size = UDim2.new(0.9, 0, 0.08, 0)
 
 local hopStatusCorner = Instance.new("UICorner")
-hopStatusCorner.CornerRadius = UDim.new(0, 8)
+hopStatusCorner.CornerRadius = UDim.new(0, 6)
 hopStatusCorner.Parent = hopStatusFrame
 
 -- Label de status do hop
@@ -406,64 +426,7 @@ hopStatusLabel.Font = Enum.Font.Gotham
 hopStatusLabel.Text = "Status: Pronto"
 hopStatusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 hopStatusLabel.TextScaled = true
-hopStatusLabel.TextSize = 14
-
--- Estatísticas do hop
-local hopStatsFrame = Instance.new("Frame")
-hopStatsFrame.Name = "StatsFrame"
-hopStatsFrame.Parent = serverHopGui
-hopStatsFrame.BackgroundTransparency = 1
-hopStatsFrame.Position = UDim2.new(0, 0, 0.35, 0)
-hopStatsFrame.Size = UDim2.new(1, 0, 0.1, 0)
-
--- Labels de estatísticas
-local serversLabel = Instance.new("TextLabel")
-serversLabel.Name = "ServersLabel"
-serversLabel.Parent = hopStatsFrame
-serversLabel.BackgroundTransparency = 1
-serversLabel.Position = UDim2.new(0.05, 0, 0, 0)
-serversLabel.Size = UDim2.new(0.6, 0, 0.5, 0)
-serversLabel.Font = Enum.Font.Gotham
-serversLabel.Text = "Servidores visitados:"
-serversLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-serversLabel.TextScaled = true
-serversLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local serversCount = Instance.new("TextLabel")
-serversCount.Name = "ServersCount"
-serversCount.Parent = hopStatsFrame
-serversCount.BackgroundTransparency = 1
-serversCount.Position = UDim2.new(0.7, 0, 0, 0)
-serversCount.Size = UDim2.new(0.25, 0, 0.5, 0)
-serversCount.Font = Enum.Font.GothamBold
-serversCount.Text = "0"
-serversCount.TextColor3 = Color3.fromRGB(255, 255, 255)
-serversCount.TextScaled = true
-serversCount.TextXAlignment = Enum.TextXAlignment.Right
-
-local brainrotsLabel = Instance.new("TextLabel")
-brainrotsLabel.Name = "BrainrotsLabel"
-brainrotsLabel.Parent = hopStatsFrame
-brainrotsLabel.BackgroundTransparency = 1
-brainrotsLabel.Position = UDim2.new(0.05, 0, 0.5, 0)
-brainrotsLabel.Size = UDim2.new(0.6, 0, 0.5, 0)
-brainrotsLabel.Font = Enum.Font.Gotham
-brainrotsLabel.Text = "Brainrots especiais:"
-brainrotsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-brainrotsLabel.TextScaled = true
-brainrotsLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local brainrotsCount = Instance.new("TextLabel")
-brainrotsCount.Name = "BrainrotsCount"
-brainrotsCount.Parent = hopStatsFrame
-brainrotsCount.BackgroundTransparency = 1
-brainrotsCount.Position = UDim2.new(0.7, 0, 0.5, 0)
-brainrotsCount.Size = UDim2.new(0.25, 0, 0.5, 0)
-brainrotsCount.Font = Enum.Font.GothamBold
-brainrotsCount.Text = "0"
-brainrotsCount.TextColor3 = Color3.fromRGB(255, 255, 255)
-brainrotsCount.TextScaled = true
-brainrotsCount.TextXAlignment = Enum.TextXAlignment.Right
+hopStatusLabel.TextSize = 12
 
 -- Função para criar botão do server hop
 local function createHopButton(name, text, position, size, color, parent)
@@ -482,111 +445,176 @@ local function createHopButton(name, text, position, size, color, parent)
     button.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     
     local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 8)
+    buttonCorner.CornerRadius = UDim.new(0, 6)
     buttonCorner.Parent = button
     
     return button
 end
 
 -- Criar botões do server hop
-local secretButton = createHopButton("SecretButton", "Procurar SECRET", UDim2.new(0.05, 0, 0.5, 0), UDim2.new(0.425, 0, 0.08, 0), Color3.fromRGB(0, 0, 0), serverHopGui)
-local godButton = createHopButton("GodButton", "Procurar GOD", UDim2.new(0.525, 0, 0.5, 0), UDim2.new(0.425, 0, 0.08, 0), Color3.fromRGB(138, 43, 226), serverHopGui)
-local secretGodButton = createHopButton("SecretGodButton", "Procurar SECRET/GOD", UDim2.new(0.05, 0, 0.6, 0), UDim2.new(0.9, 0, 0.08, 0), Color3.fromRGB(50, 205, 50), serverHopGui)
-local espGodButton = createHopButton("EspGodButton", "ESP GOD", UDim2.new(0.05, 0, 0.72, 0), UDim2.new(0.425, 0, 0.08, 0), Color3.fromRGB(138, 43, 226), serverHopGui)
-local espSecretButton = createHopButton("EspSecretButton", "ESP SECRET", UDim2.new(0.525, 0, 0.72, 0), UDim2.new(0.425, 0, 0.08, 0), Color3.fromRGB(0, 0, 0), serverHopGui)
+local secretButton = createHopButton("SecretButton", "Procurar SECRET", UDim2.new(0.05, 0, 0.3, 0), UDim2.new(0.425, 0, 0.12, 0), Color3.fromRGB(0, 0, 0), serverHopGui)
+local godButton = createHopButton("GodButton", "Procurar GOD", UDim2.new(0.525, 0, 0.3, 0), UDim2.new(0.425, 0, 0.12, 0), Color3.fromRGB(0, 100, 255), serverHopGui)
+local secretGodButton = createHopButton("SecretGodButton", "Procurar SECRET/GOD", UDim2.new(0.05, 0, 0.45, 0), UDim2.new(0.9, 0, 0.12, 0), Color3.fromRGB(50, 50, 50), serverHopGui)
+local espGodButton = createHopButton("EspGodButton", "ESP GOD", UDim2.new(0.05, 0, 0.6, 0), UDim2.new(0.425, 0, 0.12, 0), Color3.fromRGB(0, 100, 255), serverHopGui)
+local espSecretButton = createHopButton("EspSecretButton", "ESP SECRET", UDim2.new(0.525, 0, 0.6, 0), UDim2.new(0.425, 0, 0.12, 0), Color3.fromRGB(0, 0, 0), serverHopGui)
+
+-- Efeito RGB no botão SECRET/GOD (preto e azul)
+spawn(function()
+    local hue = 0
+    while wait(0.15) do
+        hue = hue + 10
+        if hue >= 360 then hue = 0 end
+        
+        local r = math.sin(math.rad(hue)) * 50
+        local g = math.sin(math.rad(hue + 120)) * 25 + 25
+        local b = math.sin(math.rad(hue + 240)) * 100 + 100
+        
+        secretGodButton.BackgroundColor3 = Color3.fromRGB(r, g, b)
+    end
+end)
 
 -- Sistema inicializado
 local systemLabel = Instance.new("TextLabel")
 systemLabel.Name = "SystemLabel"
 systemLabel.Parent = serverHopGui
 systemLabel.BackgroundColor3 = Color3.fromRGB(0, 100, 0)
+systemLabel.BackgroundTransparency = 0.3
 systemLabel.BorderSizePixel = 0
-systemLabel.Position = UDim2.new(0.05, 0, 0.85, 0)
-systemLabel.Size = UDim2.new(0.9, 0, 0.1, 0)
+systemLabel.Position = UDim2.new(0.05, 0, 0.78, 0)
+systemLabel.Size = UDim2.new(0.9, 0, 0.15, 0)
 systemLabel.Font = Enum.Font.Gotham
 systemLabel.Text = "Sistema inicializado com sucesso"
 systemLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 systemLabel.TextScaled = true
 
 local systemCorner = Instance.new("UICorner")
-systemCorner.CornerRadius = UDim.new(0, 8)
+systemCorner.CornerRadius = UDim.new(0, 6)
 systemCorner.Parent = systemLabel
 
--- Função para fazer server hop
-local function serverHop(targetType)
+-- Função para fazer ESP de brainrots
+local function createESP(espType)
+    local function highlightBrainrots()
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("TextLabel") or obj:IsA("BillboardGui") then
+                local text = string.lower(obj.Text or "")
+                local shouldHighlight = false
+                
+                if espType == "SECRET" then
+                    for _, word in pairs(secretWords) do
+                        if string.find(text, word) then
+                            shouldHighlight = true
+                            break
+                        end
+                    end
+                elseif espType == "GOD" then
+                    for _, word in pairs(godWords) do
+                        if string.find(text, word) then
+                            shouldHighlight = true
+                            break
+                        end
+                    end
+                end
+                
+                if shouldHighlight then
+                    -- Criar highlight
+                    local highlight = Instance.new("SelectionBox")
+                    highlight.Adornee = obj.Parent
+                    highlight.Color3 = espType == "GOD" and Color3.fromRGB(0, 100, 255) or Color3.fromRGB(255, 0, 0)
+                    highlight.LineThickness = 3
+                    highlight.Transparency = 0.3
+                    highlight.Parent = obj.Parent
+                    
+                    -- Criar BillboardGui para marcar
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Size = UDim2.new(0, 100, 0, 30)
+                    billboard.StudsOffset = Vector3.new(0, 3, 0)
+                    billboard.Parent = obj.Parent
+                    
+                    local label = Instance.new("TextLabel")
+                    label.Size = UDim2.new(1, 0, 1, 0)
+                    label.BackgroundTransparency = 1
+                    label.Text = espType
+                    label.TextColor3 = espType == "GOD" and Color3.fromRGB(0, 100, 255) or Color3.fromRGB(255, 255, 255)
+                    label.TextScaled = true
+                    label.Font = Enum.Font.GothamBold
+                    label.TextStrokeTransparency = 0
+                    label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                    label.Parent = billboard
+                end
+            end
+        end
+    end
+    
+    highlightBrainrots()
+    createNotification("SANTZ ESP", "ESP " .. espType .. " ativado!", 3)
+end
+
+-- Função para fazer server hop automático
+local function autoServerHop(targetType)
     if isHopping then return end
     isHopping = true
     
-    createNotification("SANTZ HOP", "Procurando servidor " .. targetType .. "...", 3)
+    createNotification("SANTZ HOP", "Procurando servidor " .. targetType .. " automaticamente...", 3)
     hopStatusLabel.Text = "Status: Procurando " .. targetType .. "..."
     
-    local servers = getServers()
-    if #servers == 0 then
-        createNotification("SANTZ HOP", "Erro ao obter lista de servidores!", 5)
-        hopStatusLabel.Text = "Status: Erro - Sem servidores"
-        isHopping = false
-        return
-    end
-    
-    -- Filtrar servidores baseado no tipo
-    local targetServers = {}
-    
-    for _, server in pairs(servers) do
-        if server.id ~= game.JobId and server.playing < server.maxPlayers then
-            local shouldAdd = false
-            
-            if targetType == "SECRET" then
-                shouldAdd = hasSpecialWords(server.name, secretWords)
-            elseif targetType == "GOD" then
-                shouldAdd = hasSpecialWords(server.name, godWords)
-            elseif targetType == "SECRET/GOD" then
-                shouldAdd = hasSpecialWords(server.name, secretWords) or hasSpecialWords(server.name, godWords)
-            elseif targetType == "ESP GOD" then
-                shouldAdd = hasSpecialWords(server.name, godWords) and server.playing > 10
-            elseif targetType == "ESP SECRET" then
-                shouldAdd = hasSpecialWords(server.name, secretWords) and server.playing > 10
-            end
-            
-            if shouldAdd then
-                table.insert(targetServers, server)
-            end
+    local function tryNextServer()
+        local servers = getServers()
+        if #servers == 0 then
+            createNotification("SANTZ HOP", "Erro ao obter lista de servidores!", 5)
+            hopStatusLabel.Text = "Status: Erro - Sem servidores"
+            isHopping = false
+            return
         end
-    end
-    
-    -- Se não encontrou servidores especiais, pegar um aleatório
-    if #targetServers == 0 then
+        
+        -- Filtrar servidores baseado no tipo
+        local targetServers = {}
+        
         for _, server in pairs(servers) do
             if server.id ~= game.JobId and server.playing < server.maxPlayers then
-                table.insert(targetServers, server)
+                local shouldAdd = false
+                
+                if targetType == "SECRET" then
+                    shouldAdd = hasSpecialWords(server.name, secretWords)
+                elseif targetType == "GOD" then
+                    shouldAdd = hasSpecialWords(server.name, godWords)
+                elseif targetType == "SECRET/GOD" then
+                    shouldAdd = hasSpecialWords(server.name, secretWords) or hasSpecialWords(server.name, godWords)
+                end
+                
+                if shouldAdd then
+                    table.insert(targetServers, server)
+                end
+            end
+        end
+        
+        if #targetServers > 0 then
+            local randomServer = targetServers[math.random(1, #targetServers)]
+            
+            -- Verificar se é um servidor especial
+            if hasSpecialWords(randomServer.name, secretWords) or hasSpecialWords(randomServer.name, godWords) then
+                specialBrainrots = specialBrainrots + 1
+                createNotification("SANTZ HOP", "Servidor " .. targetType .. " encontrado!", 5)
+            end
+            
+            serversVisited = serversVisited + 1
+            hopStatusLabel.Text = "Status: Teleportando..."
+            
+            -- Teleportar para o servidor
+            pcall(function()
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, randomServer.id, player)
+            end)
+        else
+            -- Se não encontrou, continuar procurando
+            serversVisited = serversVisited + 1
+            createNotification("SANTZ HOP", "Servidor " .. targetType .. " não encontrado, continuando...", 2)
+            wait(3)
+            if isHopping then
+                tryNextServer()
             end
         end
     end
     
-    if #targetServers > 0 then
-        local randomServer = targetServers[math.random(1, #targetServers)]
-        
-        -- Verificar se é um servidor especial
-        if hasSpecialWords(randomServer.name, secretWords) or hasSpecialWords(randomServer.name, godWords) then
-            specialBrainrots = specialBrainrots + 1
-        end
-        
-        serversVisited = serversVisited + 1
-        
-        createNotification("SANTZ HOP", "Entrando em servidor " .. targetType .. "!", 3)
-        hopStatusLabel.Text = "Status: Teleportando..."
-        
-        -- Teleportar para o servidor
-        pcall(function()
-            TeleportService:TeleportToPlaceInstance(game.PlaceId, randomServer.id, player)
-        end)
-    else
-        createNotification("SANTZ HOP", "Nenhum servidor " .. targetType .. " encontrado!", 5)
-        hopStatusLabel.Text = "Status: Nenhum servidor encontrado"
-    end
-    
-    wait(2)
-    isHopping = false
-    hopStatusLabel.Text = "Status: Pronto"
+    tryNextServer()
 end
 
 -- Função para criar slider (Superman)
@@ -595,437 +623,4 @@ local function createSlider(name, displayName, minVal, maxVal, defaultVal, yPos)
     sliderFrame.Name = name .. "Frame"
     sliderFrame.Size = UDim2.new(1, 0, 0, 40)
     sliderFrame.Position = UDim2.new(0, 0, 0, yPos)
-    sliderFrame.BackgroundTransparency = 1
-    sliderFrame.Parent = container
-    
-    local label = Instance.new("TextLabel")
-    label.Name = "Label"
-    label.Size = UDim2.new(1, 0, 0, 15)
-    label.Position = UDim2.new(0, 0, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = displayName
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.TextSize = 10
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.Font = Enum.Font.GothamSemibold
-    label.Parent = sliderFrame
-    
-    local valueLabel = Instance.new("TextLabel")
-    valueLabel.Name = "ValueLabel"
-    valueLabel.Size = UDim2.new(0, 40, 0, 15)
-    valueLabel.Position = UDim2.new(1, -40, 0, 0)
-    valueLabel.BackgroundTransparency = 1
-    valueLabel.Text = tostring(defaultVal)
-    valueLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
-    valueLabel.TextSize = 10
-    valueLabel.TextXAlignment = Enum.TextXAlignment.Right
-    valueLabel.Font = Enum.Font.GothamBold
-    valueLabel.Parent = sliderFrame
-    
-    local sliderBg = Instance.new("Frame")
-    sliderBg.Name = "SliderBg"
-    sliderBg.Size = UDim2.new(1, 0, 0, 4)
-    sliderBg.Position = UDim2.new(0, 0, 0, 20)
-    sliderBg.BackgroundColor3 = Color3.fromRGB(40, 43, 48)
-    sliderBg.BorderSizePixel = 0
-    sliderBg.Parent = sliderFrame
-    
-    local sliderBgCorner = Instance.new("UICorner")
-    sliderBgCorner.CornerRadius = UDim.new(0, 2)
-    sliderBgCorner.Parent = sliderBg
-    
-    local sliderFill = Instance.new("Frame")
-    sliderFill.Name = "SliderFill"
-    sliderFill.Size = UDim2.new((defaultVal - minVal) / (maxVal - minVal), 0, 1, 0)
-    sliderFill.Position = UDim2.new(0, 0, 0, 0)
-    sliderFill.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
-    sliderFill.BorderSizePixel = 0
-    sliderFill.Parent = sliderBg
-    
-    local sliderFillCorner = Instance.new("UICorner")
-    sliderFillCorner.CornerRadius = UDim.new(0, 2)
-    sliderFillCorner.Parent = sliderFill
-    
-    local sliderHandle = Instance.new("Frame")
-    sliderHandle.Name = "SliderHandle"
-    sliderHandle.Size = UDim2.new(0, 12, 0, 12)
-    sliderHandle.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -6, 0, -4)
-    sliderHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    sliderHandle.BorderSizePixel = 0
-    sliderHandle.Parent = sliderBg
-    
-    local handleCorner = Instance.new("UICorner")
-    handleCorner.CornerRadius = UDim.new(0, 6)
-    handleCorner.Parent = sliderHandle
-    
-    local currentValue = defaultVal
-    local dragging = false
-    
-    local function updateSlider(value)
-        currentValue = math.clamp(value, minVal, maxVal)
-        local percentage = (currentValue - minVal) / (maxVal - minVal)
-        
-        sliderFill.Size = UDim2.new(percentage, 0, 1, 0)
-        sliderHandle.Position = UDim2.new(percentage, -6, 0, -4)
-        valueLabel.Text = tostring(currentValue)
-        
-        if name == "Speed" then
-            currentSpeed = currentValue
-        elseif name == "Jump" then
-            currentJump = currentValue
-        end
-        
-        -- Salvar automaticamente quando alterar
-        saveSettings()
-    end
-    
-    sliderHandle.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-        end
-    end)
-    
-    UserInputService.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local mousePos = input.Position.X
-            local sliderPos = sliderBg.AbsolutePosition.X
-            local sliderSize = sliderBg.AbsoluteSize.X
-            local percentage = math.clamp((mousePos - sliderPos) / sliderSize, 0, 1)
-            local value = math.floor(minVal + percentage * (maxVal - minVal))
-            updateSlider(value)
-        end
-    end)
-    
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
-    
-    return updateSlider
-end
-
--- Criar sliders compactos
-local updateSpeed = createSlider("Speed", "🏃 Velocidade", 1, 200, currentSpeed, 35)
-local updateJump = createSlider("Jump", "🦘 Pulo", 1, 300, currentJump, 85)
-
--- Botão toggle Superman
-local toggleSupermanBtn = Instance.new("TextButton")
-toggleSupermanBtn.Name = "ToggleButton"
-toggleSupermanBtn.Size = UDim2.new(1, 0, 0, 30)
-toggleSupermanBtn.Position = UDim2.new(0, 0, 0, 135)
-toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
-toggleSupermanBtn.BorderSizePixel = 0
-toggleSupermanBtn.Text = "🚀 ATIVAR"
-toggleSupermanBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleSupermanBtn.TextSize = 12
-toggleSupermanBtn.Font = Enum.Font.GothamBold
-toggleSupermanBtn.Parent = container
-
-local toggleBtnCorner = Instance.new("UICorner")
-toggleBtnCorner.CornerRadius = UDim.new(0, 8)
-toggleBtnCorner.Parent = toggleSupermanBtn
-
--- Botões salvar/reset compactos
-local saveBtn = Instance.new("TextButton")
-saveBtn.Name = "SaveButton"
-saveBtn.Size = UDim2.new(0.48, 0, 0, 25)
-saveBtn.Position = UDim2.new(0, 0, 0, 175)
-saveBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
-saveBtn.BorderSizePixel = 0
-saveBtn.Text = "💾"
-saveBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-saveBtn.TextSize = 10
-saveBtn.Font = Enum.Font.GothamBold
-saveBtn.Parent = container
-
-local saveBtnCorner = Instance.new("UICorner")
-saveBtnCorner.CornerRadius = UDim.new(0, 8)
-saveBtnCorner.Parent = saveBtn
-
-local resetBtn = Instance.new("TextButton")
-resetBtn.Name = "ResetButton"
-resetBtn.Size = UDim2.new(0.48, 0, 0, 25)
-resetBtn.Position = UDim2.new(0.52, 0, 0, 175)
-resetBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
-resetBtn.BorderSizePixel = 0
-resetBtn.Text = "🔄"
-resetBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-resetBtn.TextSize = 10
-resetBtn.Font = Enum.Font.GothamBold
-resetBtn.Parent = container
-
-local resetBtnCorner = Instance.new("UICorner")
-resetBtnCorner.CornerRadius = UDim.new(0, 8)
-resetBtnCorner.Parent = resetBtn
-
--- Variáveis Superman
-local isSupermanActive = false
-local supermanConnection = nil
-
--- Funcionalidades dos botões
-
--- Santz Hall Out (Teleporte 10 passos para frente + 2 segundos na base)
-local function santzHallOut()
-    local character = player.Character
-    if character then
-        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-        if humanoidRootPart then
-            -- Teleporta 10 studs (passos) para frente
-            local lookDirection = humanoidRootPart.CFrame.LookVector
-            local newPosition = humanoidRootPart.CFrame + (lookDirection * 10)
-            humanoidRootPart.CFrame = newPosition
-            
-            -- Ativa noclip por 2 segundos para ficar dentro da base
-            local noclipConnection
-            noclipConnection = RunService.Heartbeat:Connect(function()
-                if character and character.Parent then
-                    for _, part in pairs(character:GetDescendants()) do
-                        if part:IsA("BasePart") and part.CanCollide then
-                            part.CanCollide = false
-                        end
-                    end
-                end
-            end)
-            
-            -- Desativa noclip após 2 segundos
-            wait(2)
-            if noclipConnection then
-                noclipConnection:Disconnect()
-            end
-            
-            -- Reativa colisão
-            if character and character.Parent then
-                for _, part in pairs(character:GetDescendants()) do
-                    if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-                        part.CanCollide = true
-                    end
-                end
-            end
-        end
-    end
-end
-
--- Abrir GUI Superman
-local function openSupermanGui()
-    supermanGuiOpen = not supermanGuiOpen
-    supermanGui.Visible = supermanGuiOpen
-    
-    if supermanGuiOpen then
-        -- Animação de entrada
-        supermanGui.Size = UDim2.new(0, 0, 0, 0)
-        supermanGui.Visible = true
-        local openTween = TweenService:Create(supermanGui, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 300, 0, 250)})
-        openTween:Play()
-    end
-end
-
--- Abrir GUI Server Hop
-local function openServerHopGui()
-    serverHopGuiOpen = not serverHopGuiOpen
-    serverHopGui.Visible = serverHopGuiOpen
-    
-    if serverHopGuiOpen then
-        -- Animação de entrada
-        serverHopGui.Size = UDim2.new(0, 0, 0, 0)
-        serverHopGui.Visible = true
-        local openTween = TweenService:Create(serverHopGui, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 400, 0, 400)})
-        openTween:Play()
-    end
-end
-
--- Aplicar boost Superman
-local function applySupermanBoost()
-    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-        local humanoid = player.Character.Humanoid
-        humanoid.WalkSpeed = currentSpeed
-        humanoid.JumpPower = currentJump
-        -- Para versões mais novas do Roblox
-        pcall(function()
-            humanoid.JumpHeight = currentJump / 4
-        end)
-    end
-end
-
--- Toggle Superman boost
-local function toggleSupermanBoost()
-    isSupermanActive = not isSupermanActive
-    
-    if isSupermanActive then
-        toggleSupermanBtn.Text = "🛑 PARAR"
-        toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
-        statusLabel.Text = "🟢 ATIVO - S:" .. currentSpeed .. " J:" .. currentJump
-        statusLabel.TextColor3 = Color3.fromRGB(67, 181, 129)
-        
-        -- Força as mudanças continuamente
-        supermanConnection = RunService.Heartbeat:Connect(function()
-            applySupermanBoost()
-        end)
-    else
-        toggleSupermanBtn.Text = "🚀 ATIVAR"
-        toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
-        statusLabel.Text = "🔴 BOOST INATIVO"
-        statusLabel.TextColor3 = Color3.fromRGB(185, 187, 190)
-        
-        if supermanConnection then
-            supermanConnection:Disconnect()
-            supermanConnection = nil
-        end
-        
-        if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-            local humanoid = player.Character.Humanoid
-            humanoid.WalkSpeed = 16
-            humanoid.JumpPower = 50
-            pcall(function()
-                humanoid.JumpHeight = 7.2
-            end)
-        end
-    end
-end
-
--- Rejoin
-local function rejoin()
-    TeleportService:Teleport(game.PlaceId, player)
-end
-
--- Função para resetar configurações
-local function resetSettings()
-    currentSpeed = 50
-    currentJump = 100
-    updateSpeed(currentSpeed)
-    updateJump(currentJump)
-    saveSettings()
-    print("🔄 Configurações resetadas para padrão!")
-end
-
--- Atualizar contadores na GUI do Server Hop
-local function updateStats()
-    serversCount.Text = tostring(serversVisited)
-    brainrotsCount.Text = tostring(specialBrainrots)
-end
-
--- Conectar eventos dos botões principais
-hallOutBtn.MouseButton1Click:Connect(santzHallOut)
-supermanBtn.MouseButton1Click:Connect(openSupermanGui)
-serverHopBtn.MouseButton1Click:Connect(openServerHopGui)
-rejoinBtn.MouseButton1Click:Connect(rejoin)
-
--- Conectar eventos dos botões Superman
-toggleSupermanBtn.MouseButton1Click:Connect(toggleSupermanBoost)
-closeSupermanBtn.MouseButton1Click:Connect(function()
-    supermanGui.Visible = false
-    supermanGuiOpen = false
-end)
-
--- Conectar botões de salvamento
-saveBtn.MouseButton1Click:Connect(function()
-    saveSettings()
-    print("💾 Configurações salvas com sucesso!")
-end)
-
-resetBtn.MouseButton1Click:Connect(resetSettings)
-
--- Conectar eventos dos botões Server Hop
-secretButton.MouseButton1Click:Connect(function()
-    serverHop("SECRET")
-end)
-
-godButton.MouseButton1Click:Connect(function()
-    serverHop("GOD")
-end)
-
-secretGodButton.MouseButton1Click:Connect(function()
-    serverHop("SECRET/GOD")
-end)
-
-espGodButton.MouseButton1Click:Connect(function()
-    serverHop("ESP GOD")
-end)
-
-espSecretButton.MouseButton1Click:Connect(function()
-    serverHop("ESP SECRET")
-end)
-
-closeServerHopBtn.MouseButton1Click:Connect(function()
-    serverHopGui.Visible = false
-    serverHopGuiOpen = false
-end)
-
--- Efeitos visuais dos botões principais
-local function addButtonEffects(button)
-    local originalColor = Color3.fromRGB(0, 162, 255)
-    local hoverColor = Color3.fromRGB(100, 200, 255)
-    local clickColor = Color3.fromRGB(0, 100, 200)
-    
-    button.MouseEnter:Connect(function()
-        button.TextColor3 = hoverColor
-    end)
-    
-    button.MouseLeave:Connect(function()
-        button.TextColor3 = originalColor
-    end)
-    
-    button.MouseButton1Down:Connect(function()
-        button.TextColor3 = clickColor
-    end)
-    
-    button.MouseButton1Up:Connect(function()
-        button.TextColor3 = hoverColor
-    end)
-end
-
-addButtonEffects(hallOutBtn)
-addButtonEffects(supermanBtn)
-addButtonEffects(serverHopBtn)
-addButtonEffects(rejoinBtn)
-
--- Efeito de brilho nos botões do server hop
-local function addHoverEffect(button)
-    button.MouseEnter:Connect(function()
-        button.BackgroundTransparency = 0.2
-    end)
-    
-    button.MouseLeave:Connect(function()
-        button.BackgroundTransparency = 0
-    end)
-end
-
--- Adicionar efeitos a todos os botões do server hop
-addHoverEffect(secretButton)
-addHoverEffect(godButton)
-addHoverEffect(secretGodButton)
-addHoverEffect(espGodButton)
-addHoverEffect(espSecretButton)
-
--- Loop para atualizar estatísticas do server hop
-spawn(function()
-    while wait(1) do
-        updateStats()
-    end
-end)
-
--- Reset automático do personagem
-player.CharacterAdded:Connect(function(character)
-    wait(1)
-    if isSupermanActive then
-        applySupermanBoost()
-    end
-end)
-
--- Toggle GUI principal (Tecla Insert)
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == Enum.KeyCode.Insert then
-        mainFrame.Visible = not mainFrame.Visible
-    end
-end)
-
--- Notificação de inicialização
-createNotification("SANTZ HUB RGB", "Sistema inicializado com sucesso!", 5)
-
-print("SANTZ HUB RGB carregado! Pressione INSERT para abrir/fechar.")
-print("✅ Funcionalidades:")
-print("- Santz Hall Out (teleporte + noclip)")
-print("- Superman (velocidade e pulo customizáveis)")
-print("- Server Hop (procurar servidores especiais)")
-print("- Rejoin (reconectar)")
-print("✅ Configurações carregadas: Speed " .. currentSpeed .. " | Jump " .. currentJump)
+    sliderFrame.BackgroundTransparency =
