@@ -10,9 +10,35 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 
 -- Variáveis Superman
-local currentSpeed = 16
-local currentJump = 50
 local supermanGuiOpen = false
+
+-- Sistema de salvamento
+local SETTINGS_KEY = "SantzHubSettings_" .. player.UserId
+local defaultSettings = {
+    speed = 50,
+    jump = 100
+}
+
+-- Função para salvar configurações
+local function saveSettings()
+    local settings = {
+        speed = currentSpeed,
+        jump = currentJump
+    }
+    -- Simula salvamento local (em memória durante a sessão)
+    _G.SantzHubSavedSettings = settings
+end
+
+-- Função para carregar configurações
+local function loadSettings()
+    local settings = _G.SantzHubSavedSettings or defaultSettings
+    return settings
+end
+
+-- Carregar configurações salvas
+local savedSettings = loadSettings()
+local currentSpeed = savedSettings.speed
+local currentJump = savedSettings.jump
 
 -- Criar ScreenGui principal
 local screenGui = Instance.new("ScreenGui")
@@ -107,11 +133,17 @@ rejoinBtn.TextStrokeTransparency = 0
 rejoinBtn.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 rejoinBtn.Parent = mainFrame
 
--- GUI DO SUPERMAN (baseada no código que você enviou)
+-- GUI DO SUPERMAN (tamanho normal, conteúdo compacto)
 local supermanGui = Instance.new("Frame")
 supermanGui.Name = "SupermanGUI"
-supermanGui.Size = UDim2.new(0, 400, 0, 500)
-supermanGui.Position = UDim2.new(0.5, -200, 0.5, -250)
+supermanGui.Size = UDim2.new(0, 300, 0, 250) -- Mais compacto
+supermanGui.Position = UDim2.new(0.5, -150, 0.5, -125)
+supermanGui.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+supermanGui.BorderSizePixel = 0
+supermanGui.Visible = false
+supermanGui.Active = true
+supermanGui.Draggable = true
+supermanGui.Parent = screenGui5, -250)
 supermanGui.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
 supermanGui.BorderSizePixel = 0
 supermanGui.Visible = false
@@ -124,10 +156,10 @@ local supermanCorner = Instance.new("UICorner")
 supermanCorner.CornerRadius = UDim.new(0, 12)
 supermanCorner.Parent = supermanGui
 
--- Header Superman
+-- Header Superman (compacto)
 local header = Instance.new("Frame")
 header.Name = "Header"
-header.Size = UDim2.new(1, 0, 0, 60)
+header.Size = UDim2.new(1, 0, 0, 40) -- Menor
 header.Position = UDim2.new(0, 0, 0, 0)
 header.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
 header.BorderSizePixel = 0
@@ -137,29 +169,29 @@ local headerCorner = Instance.new("UICorner")
 headerCorner.CornerRadius = UDim.new(0, 12)
 headerCorner.Parent = header
 
--- Título Superman
+-- Título Superman (compacto)
 local supermanTitle = Instance.new("TextLabel")
 supermanTitle.Name = "Title"
-supermanTitle.Size = UDim2.new(1, -100, 1, 0)
-supermanTitle.Position = UDim2.new(0, 20, 0, 0)
+supermanTitle.Size = UDim2.new(1, -80, 1, 0)
+supermanTitle.Position = UDim2.new(0, 10, 0, 0)
 supermanTitle.BackgroundTransparency = 1
-supermanTitle.Text = "⚡ SUPERMAN BOOST"
+supermanTitle.Text = "⚡ SUPERMAN"
 supermanTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-supermanTitle.TextSize = 24
+supermanTitle.TextSize = 16 -- Menor
 supermanTitle.TextXAlignment = Enum.TextXAlignment.Left
 supermanTitle.Font = Enum.Font.GothamBold
 supermanTitle.Parent = header
 
--- Botão fechar Superman
+-- Botão fechar Superman (compacto)
 local closeSupermanBtn = Instance.new("TextButton")
 closeSupermanBtn.Name = "CloseButton"
-closeSupermanBtn.Size = UDim2.new(0, 40, 0, 40)
-closeSupermanBtn.Position = UDim2.new(1, -50, 0, 10)
+closeSupermanBtn.Size = UDim2.new(0, 30, 0, 30) -- Menor
+closeSupermanBtn.Position = UDim2.new(1, -35, 0, 5)
 closeSupermanBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
 closeSupermanBtn.BorderSizePixel = 0
 closeSupermanBtn.Text = "×"
 closeSupermanBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeSupermanBtn.TextSize = 20
+closeSupermanBtn.TextSize = 16 -- Menor
 closeSupermanBtn.Font = Enum.Font.GothamBold
 closeSupermanBtn.Parent = header
 
@@ -167,18 +199,18 @@ local closeBtnCorner = Instance.new("UICorner")
 closeBtnCorner.CornerRadius = UDim.new(0, 8)
 closeBtnCorner.Parent = closeSupermanBtn
 
--- Container Superman
+-- Container Superman (compacto)
 local container = Instance.new("Frame")
 container.Name = "Container"
-container.Size = UDim2.new(1, -40, 1, -80)
-container.Position = UDim2.new(0, 20, 0, 70)
+container.Size = UDim2.new(1, -20, 1, -50) -- Menor
+container.Position = UDim2.new(0, 10, 0, 45)
 container.BackgroundTransparency = 1
 container.Parent = supermanGui
 
--- Status do boost
+-- Status do boost (compacto)
 local statusFrame = Instance.new("Frame")
 statusFrame.Name = "StatusFrame"
-statusFrame.Size = UDim2.new(1, 0, 0, 50)
+statusFrame.Size = UDim2.new(1, 0, 0, 25) -- Menor
 statusFrame.Position = UDim2.new(0, 0, 0, 0)
 statusFrame.BackgroundColor3 = Color3.fromRGB(40, 43, 48)
 statusFrame.BorderSizePixel = 0
@@ -190,59 +222,59 @@ statusCorner.Parent = statusFrame
 
 local statusLabel = Instance.new("TextLabel")
 statusLabel.Name = "StatusLabel"
-statusLabel.Size = UDim2.new(1, -20, 1, 0)
-statusLabel.Position = UDim2.new(0, 10, 0, 0)
+statusLabel.Size = UDim2.new(1, -10, 1, 0)
+statusLabel.Position = UDim2.new(0, 5, 0, 0)
 statusLabel.BackgroundTransparency = 1
 statusLabel.Text = "🔴 BOOST INATIVO"
 statusLabel.TextColor3 = Color3.fromRGB(185, 187, 190)
-statusLabel.TextSize = 16
+statusLabel.TextSize = 11 -- Menor
 statusLabel.TextXAlignment = Enum.TextXAlignment.Left
 statusLabel.Font = Enum.Font.Gotham
 statusLabel.Parent = statusFrame
 
--- Função para criar slider
+-- Função para criar slider (versão compacta)
 local function createSlider(name, displayName, minVal, maxVal, defaultVal, yPos)
     local sliderFrame = Instance.new("Frame")
     sliderFrame.Name = name .. "Frame"
-    sliderFrame.Size = UDim2.new(1, 0, 0, 80)
+    sliderFrame.Size = UDim2.new(1, 0, 0, 40) -- 3x menor
     sliderFrame.Position = UDim2.new(0, 0, 0, yPos)
     sliderFrame.BackgroundTransparency = 1
     sliderFrame.Parent = container
     
     local label = Instance.new("TextLabel")
     label.Name = "Label"
-    label.Size = UDim2.new(1, 0, 0, 25)
+    label.Size = UDim2.new(1, 0, 0, 15) -- Menor
     label.Position = UDim2.new(0, 0, 0, 0)
     label.BackgroundTransparency = 1
     label.Text = displayName
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.TextSize = 14
+    label.TextSize = 10 -- Menor
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.Font = Enum.Font.GothamSemibold
     label.Parent = sliderFrame
     
     local valueLabel = Instance.new("TextLabel")
     valueLabel.Name = "ValueLabel"
-    valueLabel.Size = UDim2.new(0, 60, 0, 25)
-    valueLabel.Position = UDim2.new(1, -60, 0, 0)
+    valueLabel.Size = UDim2.new(0, 40, 0, 15) -- Menor
+    valueLabel.Position = UDim2.new(1, -40, 0, 0)
     valueLabel.BackgroundTransparency = 1
     valueLabel.Text = tostring(defaultVal)
     valueLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
-    valueLabel.TextSize = 14
+    valueLabel.TextSize = 10 -- Menor
     valueLabel.TextXAlignment = Enum.TextXAlignment.Right
     valueLabel.Font = Enum.Font.GothamBold
     valueLabel.Parent = sliderFrame
     
     local sliderBg = Instance.new("Frame")
     sliderBg.Name = "SliderBg"
-    sliderBg.Size = UDim2.new(1, 0, 0, 6)
-    sliderBg.Position = UDim2.new(0, 0, 0, 35)
+    sliderBg.Size = UDim2.new(1, 0, 0, 4) -- Menor
+    sliderBg.Position = UDim2.new(0, 0, 0, 20)
     sliderBg.BackgroundColor3 = Color3.fromRGB(40, 43, 48)
     sliderBg.BorderSizePixel = 0
     sliderBg.Parent = sliderFrame
     
     local sliderBgCorner = Instance.new("UICorner")
-    sliderBgCorner.CornerRadius = UDim.new(0, 3)
+    sliderBgCorner.CornerRadius = UDim.new(0, 2)
     sliderBgCorner.Parent = sliderBg
     
     local sliderFill = Instance.new("Frame")
@@ -254,19 +286,19 @@ local function createSlider(name, displayName, minVal, maxVal, defaultVal, yPos)
     sliderFill.Parent = sliderBg
     
     local sliderFillCorner = Instance.new("UICorner")
-    sliderFillCorner.CornerRadius = UDim.new(0, 3)
+    sliderFillCorner.CornerRadius = UDim.new(0, 2)
     sliderFillCorner.Parent = sliderFill
     
     local sliderHandle = Instance.new("Frame")
     sliderHandle.Name = "SliderHandle"
-    sliderHandle.Size = UDim2.new(0, 20, 0, 20)
-    sliderHandle.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -10, 0, -7)
+    sliderHandle.Size = UDim2.new(0, 12, 0, 12) -- Menor
+    sliderHandle.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -6, 0, -4)
     sliderHandle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     sliderHandle.BorderSizePixel = 0
     sliderHandle.Parent = sliderBg
     
     local handleCorner = Instance.new("UICorner")
-    handleCorner.CornerRadius = UDim.new(0, 10)
+    handleCorner.CornerRadius = UDim.new(0, 6)
     handleCorner.Parent = sliderHandle
     
     local currentValue = defaultVal
@@ -277,7 +309,7 @@ local function createSlider(name, displayName, minVal, maxVal, defaultVal, yPos)
         local percentage = (currentValue - minVal) / (maxVal - minVal)
         
         sliderFill.Size = UDim2.new(percentage, 0, 1, 0)
-        sliderHandle.Position = UDim2.new(percentage, -10, 0, -7)
+        sliderHandle.Position = UDim2.new(percentage, -6, 0, -4) -- Ajustado para handle menor
         valueLabel.Text = tostring(currentValue)
         
         if name == "Speed" then
@@ -285,6 +317,9 @@ local function createSlider(name, displayName, minVal, maxVal, defaultVal, yPos)
         elseif name == "Jump" then
             currentJump = currentValue
         end
+        
+        -- Salvar automaticamente quando alterar
+        saveSettings()
     end
     
     sliderHandle.InputBegan:Connect(function(input)
@@ -313,30 +348,79 @@ local function createSlider(name, displayName, minVal, maxVal, defaultVal, yPos)
     return updateSlider
 end
 
--- Criar sliders
-local updateSpeed = createSlider("Speed", "🏃 Velocidade", 1, 200, 50, 70)
-local updateJump = createSlider("Jump", "🦘 Força do Pulo", 1, 300, 100, 160)
+-- Criar sliders compactos
+local updateSpeed = createSlider("Speed", "🏃 Velocidade", 1, 200, currentSpeed, 35)
+local updateJump = createSlider("Jump", "🦘 Pulo", 1, 300, currentJump, 85)
 
--- Botão toggle Superman
+-- Botão toggle Superman (compacto)
 local toggleSupermanBtn = Instance.new("TextButton")
 toggleSupermanBtn.Name = "ToggleButton"
-toggleSupermanBtn.Size = UDim2.new(1, 0, 0, 50)
-toggleSupermanBtn.Position = UDim2.new(0, 0, 0, 260)
+toggleSupermanBtn.Size = UDim2.new(1, 0, 0, 30) -- Menor
+toggleSupermanBtn.Position = UDim2.new(0, 0, 0, 135)
 toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
 toggleSupermanBtn.BorderSizePixel = 0
-toggleSupermanBtn.Text = "🚀 ATIVAR BOOST"
+toggleSupermanBtn.Text = "🚀 ATIVAR"
 toggleSupermanBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleSupermanBtn.TextSize = 18
+toggleSupermanBtn.TextSize = 12 -- Menor
 toggleSupermanBtn.Font = Enum.Font.GothamBold
 toggleSupermanBtn.Parent = container
 
-local toggleCorner = Instance.new("UICorner")
-toggleCorner.CornerRadius = UDim.new(0, 8)
-toggleCorner.Parent = toggleSupermanBtn
+-- Botões salvar/reset compactos
+local saveBtn = Instance.new("TextButton")
+saveBtn.Name = "SaveButton"
+saveBtn.Size = UDim2.new(0.48, 0, 0, 25) -- Menor
+saveBtn.Position = UDim2.new(0, 0, 0, 175)
+saveBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
+saveBtn.BorderSizePixel = 0
+saveBtn.Text = "💾"
+saveBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+saveBtn.TextSize = 10
+saveBtn.Font = Enum.Font.GothamBold
+saveBtn.Parent = container
+
+local resetBtn = Instance.new("TextButton")
+resetBtn.Name = "ResetButton"
+resetBtn.Size = UDim2.new(0.48, 0, 0, 25) -- Menor
+resetBtn.Position = UDim2.new(0.52, 0, 0, 175)
+resetBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
+resetBtn.BorderSizePixel = 0
+resetBtn.Text = "🔄"
+resetBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+resetBtn.TextSize = 10
+resetBtn.Font = Enum.Font.GothamBold
+resetBtn.Parent = container
 
 -- Variáveis Superman
 local isSupermanActive = false
 local supermanConnection = nil
+
+-- Função para mostrar feedback de salvamento (removida - sem espaço)
+local function showSaveFeedback(message, color)
+    -- Feedback visual simplificado no console
+    print(message)
+end
+
+-- Função para resetar configurações
+local function resetSettings()
+    currentSpeed = 50
+    currentJump = 100
+    updateSpeed(currentSpeed)
+    updateJump(currentJump)
+    saveSettings()
+    showSaveFeedback("🔄 Resetado!")
+end
+
+-- Função para resetar configurações
+local function resetSettings()
+    currentSpeed = 50
+    currentJump = 100
+    updateSpeed(currentSpeed)
+    updateJump(currentJump)
+    saveSettings()
+    spawn(function()
+        showSaveFeedback("🔄 Configurações resetadas para padrão!", Color3.fromRGB(255, 73, 97))
+    end)
+end
 
 -- Funcionalidades dos botões
 
@@ -390,7 +474,7 @@ local function openSupermanGui()
         -- Animação de entrada
         supermanGui.Size = UDim2.new(0, 0, 0, 0)
         supermanGui.Visible = true
-        local openTween = TweenService:Create(supermanGui, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 400, 0, 500)})
+        local openTween = TweenService:Create(supermanGui, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 300, 0, 250)})
         openTween:Play()
     end
 end
@@ -413,9 +497,9 @@ local function toggleSupermanBoost()
     isSupermanActive = not isSupermanActive
     
     if isSupermanActive then
-        toggleSupermanBtn.Text = "🛑 PARAR BOOST"
+        toggleSupermanBtn.Text = "🛑 PARAR"
         toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(255, 73, 97)
-        statusLabel.Text = "🟢 BOOST ATIVO - Speed: " .. currentSpeed .. " | Jump: " .. currentJump
+        statusLabel.Text = "🟢 ATIVO - S:" .. currentSpeed .. " J:" .. currentJump
         statusLabel.TextColor3 = Color3.fromRGB(67, 181, 129)
         
         -- Força as mudanças continuamente
@@ -423,7 +507,7 @@ local function toggleSupermanBoost()
             applySupermanBoost()
         end)
     else
-        toggleSupermanBtn.Text = "🚀 ATIVAR BOOST"
+        toggleSupermanBtn.Text = "🚀 ATIVAR"
         toggleSupermanBtn.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
         statusLabel.Text = "🔴 BOOST INATIVO"
         statusLabel.TextColor3 = Color3.fromRGB(185, 187, 190)
@@ -459,6 +543,16 @@ closeSupermanBtn.MouseButton1Click:Connect(function()
     supermanGui.Visible = false
     supermanGuiOpen = false
 end)
+
+-- Conectar botões de salvamento
+saveBtn.MouseButton1Click:Connect(function()
+    saveSettings()
+    spawn(function()
+        showSaveFeedback("💾 Configurações salvas com sucesso!", Color3.fromRGB(67, 181, 129))
+    end)
+end)
+
+resetBtn.MouseButton1Click:Connect(resetSettings)
 
 -- Efeitos visuais dos botões principais
 local function addButtonEffects(button)
@@ -509,3 +603,4 @@ end)
 
 print("SANTZ HUB carregado! Pressione INSERT para abrir/fechar.")
 print("Clique em Superman para abrir a tabela de configurações!")
+print("✅ Configurações carregadas: Speed " .. currentSpeed .. " | Jump " .. currentJump)
