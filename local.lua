@@ -1,5 +1,5 @@
 -- SANTZ STORE - Script Completo, Moderno e Organizado (~400 linhas)
--- Autor: santz-hub123 | Discord: @santz | github.com/santz-hub123
+-- Autor: santz-hub123 | tiktok SATNZ STORE | github.com/santz-hub123
 
 -- Serviços Roblox
 local Players = game:GetService("Players")
